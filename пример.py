@@ -11,7 +11,7 @@ def detect_emotions(text):
     emotion_keywords = {
         "Радост": ["happy", "love", "amazing", "great", "excellent"],
         "Гняв": ["angry", "terrible", "awful", "hate", "worst"],
-        "Съмнение": ["not sure", "maybe", "i think", "unsure", "unclear"],
+        "Съмнение": ["not sure", "maybe", "i think", "unsure", "unclear", "?"],
         "Изненада": ["wow", "surprised", "unexpected", "amazed", "shocked"]
     }
 
