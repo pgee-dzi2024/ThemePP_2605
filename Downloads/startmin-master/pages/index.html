@@ -347,15 +347,15 @@
                         <div class="col-lg-8">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <i class="fa fa-bar-chart-o fa-fw"></i> Area Chart Example
+                                    <i class="fa fa-pencil fa-fw"></i> Въвеждане на текст
                                     <div class="pull-right">
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                                Actions
+                                                Вид текст
                                                 <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu pull-right" role="menu">
-                                                <li><a href="#">Manual text</a>
+                                                <li><a href="#">Ръчно въведен отзив</a>
                                                 </li>
                                                 <li><a href="#">URL</a>
                                                 </li>
@@ -364,17 +364,29 @@
                                     </div>
                                 </div>
                                 <!-- /.panel-heading -->
-                                <input
-                                  type="text"
+                                <textarea
                                   id="name"
                                   name="name"
-                                  required
-                                  minlength="4"
-                                  maxlength="8"
-                                  size="92"
-                                />
+                                  class="form-control"
+                                  rows="7"
+                                  style="resize: none;"
+                                ></textarea>
+
                                 <!-- /.panel-body -->
                             </div>
+                            <button
+                                  type="button"
+                                  class="btn btn-primary btn-sm"
+                                  style="
+                                    margin-top: -22px;
+                                    margin-bottom: 20px;
+                                    width: 120px;
+                                    border-top-left-radius: 0;
+                                    border-top-right-radius: 0;
+                                  "
+                                >
+                                    Check
+                                </button>
                             <!-- /.panel -->
                             <div class="panel panel-default">
                                 <div class="panel-heading">
@@ -633,7 +645,7 @@
                         <div class="col-lg-4">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <i class="fa fa-bell fa-fw"></i> Other emotions
+                                    <i class="fa fa-smile-o fa-fw"></i> Други емоции
                                 </div>
                                 <!-- /.panel-heading -->
                                 <div class="panel-body">
@@ -652,7 +664,7 @@
                             <div class="chat-panel panel panel-default">
                                 <div class="panel-heading">
                                     <i class="fa fa-comments fa-fw"></i>
-                                    Chat
+                                    Отзиви
                                     <div class="btn-group pull-right">
                                         <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
                                             <i class="fa fa-chevron-down"></i>
