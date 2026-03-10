@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6363c3da-3936-4c3b-a953-150f780d5a76" name="Changes" comment="Опит с chatgpt">
+    <list default="true" id="6363c3da-3936-4c3b-a953-150f780d5a76" name="Changes" comment="Модел">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DP/main/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/DP/main/models.py" afterDir="false" />
     </list>
@@ -324,7 +324,15 @@
       <option name="project" value="LOCAL" />
       <updated>1771231368219</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Модел">
+      <option name="closed" value="true" />
+      <created>1771326411220</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1771326411220</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -343,7 +351,8 @@
     <MESSAGE value="Чиста инсталация на django" />
     <MESSAGE value="database" />
     <MESSAGE value="Опит с chatgpt" />
-    <option name="LAST_COMMIT_MESSAGE" value="Опит с chatgpt" />
+    <MESSAGE value="Модел" />
+    <option name="LAST_COMMIT_MESSAGE" value="Модел" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/ThemePP_2605_new$.coverage" NAME="пример Coverage Results" MODIFIED="1767944795720" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
