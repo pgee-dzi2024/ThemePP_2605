@@ -347,7 +347,39 @@
       <option name="project" value="LOCAL" />
       <updated>1773389888475</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="тест">
+      <option name="closed" value="true" />
+      <created>1773390254992</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1773390254992</updated>
+    </task>
+    <task id="LOCAL-00020" summary="тест">
+      <option name="closed" value="true" />
+      <created>1773390333271</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1773390333271</updated>
+    </task>
+    <task id="LOCAL-00021" summary="тест">
+      <option name="closed" value="true" />
+      <created>1773390363994</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1773390363994</updated>
+    </task>
+    <task id="LOCAL-00022" summary="тест">
+      <option name="closed" value="true" />
+      <created>1773390384583</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1773390384583</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
