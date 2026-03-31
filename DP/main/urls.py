@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', index, name='home'),
+    path("api/analyze/", AnalyzeTextAPIView.as_view(), name="api-analyze"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
