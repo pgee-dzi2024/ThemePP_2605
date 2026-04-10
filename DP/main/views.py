@@ -59,5 +59,16 @@ class AnalyzeTextAPIView(APIView):
             },
             status=status.HTTP_200_OK
         )
+
 def index(request):
     return render(request, 'main/index.html')
+
+def index_old(request):
+    return render(request, 'main/index_old.html')
+
+def index_alex(request):
+    return render(request, 'main/index_alex.html')
+
+def index_gpt(request):
+    return render(request, 'main/index_gpt.html')
+

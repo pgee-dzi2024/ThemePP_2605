@@ -1,0 +1,1094 @@
+Прикачил съм задание за дипломен проект. Имам инсталиран Django и съм създал Django проект, който се казва DP. В него съм създал приложение main. Инсталирал съм DRF. Дай идея за реализация на практическата част на дипломния проект и стъпки за реализацията
+Задание тема 05.docx
+Document
+Gemini 3.1 Pro
+Идея за практическата част (в рамките на Django + DRF)
+Проект: „Анализатор на отзиви“ (Sentiment Analysis уеб приложение)
+Приложението приема текст от потребителя (и по желание – извлича текст от URL), прави предобработка (NLP), после класифицира настроението като „Позитивен / Негативен / Неутрален“ и показва оценка/вероятност + визуализация (напр. лента/прогрес бар и графика).
+Подходяща архитектура за дипломна работа:
+•	Backend: Django + DRF (API)
+•	Frontend:
+o	вариант A (най-лесно): Django templates + малко JS (fetch към DRF)
+o	вариант B: отделен фронтенд (React/Vue) – само ако имаш време
+•	NLP модел:
+o	най-лесно за демонстрация: готов модел (напр. transformers pipeline) или TextBlob/VADER (ако е английски)
+o	ако искаш по-„училищно/ML“: sklearn (TF IDF + LogisticRegression) обучен на dataset
+Тъй като в заданието пише „потребителски текст и/или извличане на текст от URL“ и „визуализация“, най-добре е да направиш:
+•	вход: textarea + поле за URL (по избор)
+•	изход: label (клас) + confidence score + графика (bar chart) на вероятностите за 3-те класа
+•	история на анализите (запазване в база) – много добре стои като функционалност и за демонстрация
+________________________________________
+Функционалности (покриват изискванията от заданието)
+1.	Въвеждане на данни
+•	Текст, въведен от потребителя
+•	(по желание) URL → извличане на текст (напр. от страница с отзив)
+2.	Предобработка на текста
+•	lowercasing
+•	махане на излишни интервали
+•	премахване на пунктуация/емоджита (по избор)
+•	токенизация (по избор)
+•	stopwords (ако правиш sklearn вариант)
+3.	Класификация на настроението
+•	резултат: positive | negative | neutral
+•	изчисляване на score / вероятности (пример: positive=0.72, neutral=0.20, negative=0.08)
+4.	Визуализация
+•	прогрес бар / badge с цвят
+•	bar chart с 3 колони (вероятности)
+•	(по желание) wordcloud или топ думи след TF IDF
+5.	Демонстрация на локална машина
+•	pip install -r requirements.txt
+•	python manage.py migrate
+•	python manage.py runserver
+•	примерни входове за тест
+________________________________________
+Предложени стъпки за реализация (практичен план)
+Етап 1: Подготовка на проекта
+1.	Увери се, че имаш:
+o	DP проект
+o	app main
+o	DRF добавен в INSTALLED_APPS
+2.	Направи .env (ако ще пазиш секрети), добави DEBUG, SECRET_KEY.
+Етап 2: Дизайн на данните (модели)
+Създай модел за история на анализите (много добре за дипломна защита):
+•	ReviewAnalysis
+o	input_text (TextField)
+o	source_url (URLField, optional)
+o	clean_text (TextField)
+o	sentiment (CharField choices)
+o	score (FloatField) – или 3 отделни полета pos/neu/neg
+o	created_at
+После:
+•	makemigrations + migrate
+•	(по желание) admin регистрация
+Етап 3: NLP модул (отделен файл)
+Направи папка примерно main/nlp/ с:
+•	preprocess.py → функция clean_text(text) -> str
+•	classifier.py → функция predict_sentiment(text) -> {label, scores}
+Вариант за най-бърза реализация (готов модел):
+•	използваш готов sentiment pipeline и връщаш резултат + confidence.
+Вариант за по-„проектен“ вид (sklearn):
+•	имаш скрипт train_model.py, който:
+o	зарежда dataset
+o	TF IDF
+o	LogisticRegression
+o	запазва model.joblib + vectorizer.joblib
+•	в Django зареждаш joblib модел и правиш predict_proba
+Етап 4: DRF API
+1.	Serializer за вход:
+•	text (required)
+•	url (optional)
+2.	Endpoint:
+•	POST /api/analyze/
+o	приема текст или url
+o	ако има url → извличаш текст (requests + BeautifulSoup)
+o	preprocess
+o	predict
+o	запис в DB
+o	връща JSON:
+o	{
+o	  "sentiment": "positive",
+o	  "scores": {"positive": 0.72, "neutral": 0.20, "negative": 0.08},
+o	  "clean_text": "...",
+o	  "id": 15
+o	}
+3.	Допълнително (по желание, но силно препоръчително):
+•	GET /api/history/ (последни N анализа)
+•	GET /api/history/<id>/
+Етап 5: UI (потребителски интерфейс)
+Най-лесно:
+•	Django template страница /
+•	форма с textarea + url field
+•	бутон „Анализирай“
+•	JS fetch() към /api/analyze/ и показва резултата
+•	визуализация:
+o	progress bar (HTML/CSS)
+o	bar chart:
+	вариант A: Chart.js (лесно)
+	вариант B: matplotlib да генерира PNG (по-тежко, но става)
+Етап 6: Тестване
+•	Unit тестове поне за:
+o	preprocess функция
+o	analyze endpoint (статус 200, валиден JSON)
+•	Примерни тестови изречения (3-5 за всеки клас)
+Етап 7: Документация за стартиране (за дипломната)
+Добави README.md:
+•	зависимости
+•	команди
+•	как да се тества
+•	примерни входове
+•	screenshots
+________________________________________
+Какво да избереш, за да е реалистично в срок
+Най-добър баланс за дипломна защита:
+•	DRF API + Django templates UI + запис в база + визуализация с Chart.js
+•	модел: готов NLP модел (за да не губиш време в обучение), но описваш в теорията и TF IDF подхода като алтернатива
+Ако ми кажеш:
+1.	ще анализираш ли български, английски или и двете?
+2.	искаш ли да има URL extraction задължително?
+3.	предпочиташ ли готов модел или обучен от теб sklearn модел?
+…ще ти дам конкретна структура на файловете, URL-и (urls.py), примерни DRF view класове и минимален HTML+JS за визуализация, съобразени с избора ти.
+
+Ти
+Предпочитам модел: готов NLP модел, ще анализираме български език
+Gemini 3.1 Pro
+Ок — щом ще е готов NLP модел и български език, най-практичното решение за дипломната е:
+•	Django + DRF (API)
+•	UI страница (Django templates) + малко JS за викане на API
+•	NLP модул, който ползва готов transformer модел за sentiment на български
+•	Запис на резултатите в DB + визуализация (лента + bar chart)
+По-долу ти давам конкретна идея и точни стъпки, съобразени с изискванията от заданието (въвеждане, предобработка, класификация с вероятност, визуализация, локална демонстрация, по желание URL).
+________________________________________
+1) Идея за реализация: „Анализатор на отзиви (BG)“
+Какво прави приложението
+1.	Потребителят въвежда текст на български (пример: отзив за продукт/услуга).
+2.	По желание: дава URL → приложението извлича текст (напр. от страница с отзиви).
+3.	Прави предобработка (нормализация, чистене).
+4.	Пуска текста през готов sentiment model и връща:
+•	клас: Позитивен / Негативен / Неутрален
+•	вероятности/оценка (пример: positive=0.78, neutral=0.15, negative=0.07)
+5.	Показва резултата с:
+•	цветен badge (позитивен/негативен/неутрален)
+•	bar chart на вероятностите
+6.	Записва анализа в база → има „История“.
+Това покрива всичко от заданието.
+________________________________________
+2) Избор на готов модел за български (реалистични варианти)
+Има 2 подхода:
+Вариант A (най-сигурен): Multilingual sentiment модел
+Ползваш HuggingFace transformers pipeline за sentiment, който работи добре и за български (multilingual). Плюс: лесна интеграция. Минус: понякога дава само POS/NEG, не винаги „NEU“.
+Вариант B: Модел с 3 класа (POS/NEU/NEG)
+Търсиш/ползваш модел, който връща 3 класа. Ако конкретният модел ти върне 2 класа, можеш да изведеш „Неутрален“ с правило, напр.:
+•	ако max_prob < 0.60 → NEU
+Това е напълно приемливо за дипломна работа (описваш го в теорията като праг).
+Препоръка: започни с A + праг за неутрално, защото е най-бързо и стабилно.
+________________________________________
+3) Стъпки за реализация (по етапи)
+Етап 1: Структура и зависимости
+1.	В settings.py:
+•	добави: rest_framework, main
+2.	Инсталирай пакети:
+•	djangorestframework
+•	transformers
+•	torch (или подходящ backend)
+•	beautifulsoup4 + requests (ако ще има URL extraction)
+•	(по желание) python-dotenv
+Направи requirements.txt, за да можеш да дадеш инструкции за стартиране.
+________________________________________
+Етап 2: Модел (DB) за история на анализите
+В main/models.py направи примерно:
+•	ReviewAnalysis
+o	input_text (TextField)
+o	source_url (URLField, blank=True, null=True)
+o	clean_text (TextField)
+o	sentiment (CharField choices: POS/NEG/NEU)
+o	pos_score, neu_score, neg_score (FloatField)
+o	created_at (DateTimeField auto_now_add)
+После:
+•	python manage.py makemigrations
+•	python manage.py migrate
+•	регистрирай в admin (по желание, но е полезно за демонстрация)
+________________________________________
+Етап 3: NLP модул (отделно от views)
+Направи директория main/nlp/:
+preprocess.py
+•	normalize(text):
+o	strip
+o	replace multiple spaces
+o	(по избор) махане на линкове/HTML
+o	(по избор) махане на повторени пунктуации
+sentiment.py
+•	lazy-load sentiment pipeline (да не се зарежда при всеки request)
+•	predict(text) -> (label, scores_dict)
+•	правило за NEU ако моделът е 2-класов:
+o	ако |pos-neg| е малко или max_prob < threshold → NEU
+Важно за дипломна: отдели ясно предобработка от класификация.
+________________________________________
+Етап 4: URL extraction модул (ако ще го правиш)
+main/nlp/extract.py
+•	extract_text_from_url(url):
+o	requests.get
+o	BeautifulSoup → вземаш <p> текст, чистиш
+o	ограничение: ако текстът стане прекалено дълъг, режеш (примерно до 2000–4000 символа), за да не бави модела
+________________________________________
+Етап 5: DRF API
+Направи API, което фронтендът (страницата) вика.
+1.	Serializer за вход:
+•	text (optional ако има url)
+•	url (optional ако има text)
+•	валидирай: поне едното да е подадено
+2.	View:
+•	POST /api/analyze/
+o	ако има url → extract_text
+o	preprocess
+o	predict
+o	save в DB
+o	return JSON: label + scores + id
+3.	View за история:
+•	GET /api/history/ → последни 20 анализа
+•	(по желание) филтър по дата
+4.	urls:
+•	main/urls.py (api endpoints)
+•	включи в DP/urls.py
+________________________________________
+Етап 6: UI (потребителски интерфейс) + визуализация
+Най-лесно и добре за дипломна:
+•	GET / → template main/index.html
+•	форма:
+o	textarea (текст)
+o	input (URL)
+o	бутон Analyze
+JS:
+•	fetch('/api/analyze/', {method:'POST', body: JSON.stringify(...)})
+•	показва:
+o	резултат (badge)
+o	вероятности
+o	bar chart
+Визуализация (препоръка): Chart.js
+•	супер лесно за 3 вероятности
+•	изглежда професионално
+•	не товари backend-а
+________________________________________
+Етап 7: Тестване и демонстрация
+1.	Направи 10–15 примерни текста (български):
+•	5 позитивни
+•	5 негативни
+•	5 неутрални
+2.	DRF tests:
+•	тест за празен input (400)
+•	тест за валиден текст (200)
+•	тест за url (ако има)
+3.	README:
+•	как да се инсталира
+•	как се стартира
+•	примерни заявки (curl) + примерни текстове
+________________________________________
+4) Минимален „план-график“ до работеща версия (реалистично)
+1.	Ден 1: models + миграции + admin + базов template
+2.	Ден 2: NLP preprocess + sentiment predict (локално тестване)
+3.	Ден 3: DRF endpoint /api/analyze/ + запис в DB
+4.	Ден 4: UI + Chart.js визуализация
+5.	Ден 5: URL extraction + history + polishing + README + тестове
+________________________________________
+5) Уточняващи въпроси (за да ти дам конкретни файлове/код)
+Отговори с кратко:
+1.	Искаш ли URL извличане да е част от финалната версия, или е „ако остане време“?
+2.	UI да е с Django templates (по-лесно) или отделен фронтенд?
+3.	Проектът ще работи ли само локално на CPU (без GPU)? (важно за избора на модел и скорост)
+Ако кажеш тези 3 неща, ще ти дам точна структура на папките и готови скелети на файловете (models/serializers/views/urls + примерен template + JS), така че да можеш директно да започнеш да пишеш проекта в твоя DP/main.
+
+Ти
+Спирам се на Вариант A - Multilingual sentiment модел. нека започнем по предложения план
+Gemini 3.1 Pro
+Отличен избор! Започваме стъпка по стъпка по плана с Вариант А (готов Multilingual Transformer модел, работещ на CPU локално).
+Ето първите стъпки, за да подготвим фундамента на проекта (базата данни и настройките).
+Стъпка 1: Инсталиране на нужните библиотеки
+Увери се, че си в активирана виртуална среда (venv) и инсталирай нужните пакети. Можеш да си създадеш файл requirements.txt със следното съдържание:
+django
+djangorestframework
+transformers
+torch
+Инсталирай ги с: pip install -r requirements.txt
+Стъпка 2: Настройки на проекта (DP/settings.py)
+Отвори файла DP/settings.py и добави rest_framework и твоето приложение main в INSTALLED_APPS:
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
+    # Добавени от теб:
+    'rest_framework',
+    'main',
+]
+Стъпка 3: Създаване на модела за базата данни (main/models.py)
+Отвори main/models.py и добави модела, който ще пази историята на анализите. Той съдържа оригиналния текст, изчистения текст, крайния резултат (sentiment) и вероятностите за трите класа.
+from django.db import models
+
+class ReviewAnalysis(models.Model):
+    SENTIMENT_CHOICES = [
+        ('positive', 'Позитивен'),
+        ('neutral', 'Неутрален'),
+        ('negative', 'Негативен'),
+    ]
+
+    input_text = models.TextField(verbose_name="Въведен текст")
+    clean_text = models.TextField(verbose_name="Предобработен текст", blank=True, null=True)
+
+    sentiment = models.CharField(max_length=10, choices=SENTIMENT_CHOICES, verbose_name="Настроение")
+
+    # Вероятности (scores)
+    pos_score = models.FloatField(verbose_name="Вероятност Позитивен")
+    neu_score = models.FloatField(verbose_name="Вероятност Неутрален")
+    neg_score = models.FloatField(verbose_name="Вероятност Негативен")
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата на анализ")
+
+    def __str__(self):
+        return f"{self.sentiment.upper()} - {self.input_text[:50]}..."
+
+    class Meta:
+        verbose_name = "Анализ на отзив"
+        verbose_name_plural = "Анализи на отзиви"
+        ordering = ['-created_at']
+Стъпка 4: Регистриране в Админ панела (main/admin.py)
+За да можеш лесно да виждаш какво се записва, отвори main/admin.py:
+from django.contrib import admin
+from .models import ReviewAnalysis
+
+@admin.register(ReviewAnalysis)
+class ReviewAnalysisAdmin(admin.ModelAdmin):
+    list_display = ('id', 'sentiment', 'pos_score', 'neu_score', 'neg_score', 'created_at')
+    list_filter = ('sentiment',)
+    search_fields = ('input_text',)
+Стъпка 5: Прилагане на миграциите
+Отвори терминала и изпълни:
+python manage.py makemigrations
+python manage.py migrate
+Създай си и суперпотребител, за да влизаш в админ панела:
+python manage.py createsuperuser
+________________________________________
+Твоята задача сега:
+Изпълни тези 5 стъпки. Стартирай сървъра (python manage.py runserver), влез на http://127.0.0.1:8000/admin/ и провери дали виждаш таблицата "Анализи на отзиви".
+Пиши ми, когато си готов с това, за да преминем към най-интересната част: Етап 3 (Създаване на NLP модула с Transformer модела за български език)!
+
+Ти
+gotow sym
+Gemini 3.1 Pro
+Супер — продължаваме с Етап 3: NLP модул (готов multilingual sentiment модел) и после ще вържем всичко към DRF endpoint.
+По-долу са стъпките и готов код (копи/пейст). Идеята е:
+•	отделяме предобработка в main/nlp/preprocess.py
+•	отделяме класификация в main/nlp/sentiment.py
+•	правим „неутрално“ чрез праг (защото много multilingual модели връщат само POS/NEG)
+________________________________________
+Етап 3: NLP модул
+Стъпка 3.1: Направи папки
+В app-а main създай:
+main/
+  nlp/
+    __init__.py
+    preprocess.py
+    sentiment.py
+________________________________________
+Стъпка 3.2: main/nlp/preprocess.py
+import re
+
+def clean_text(text: str) -> str:
+    """
+    Лека нормализация (достатъчна за дипломната):
+    - trim
+    - премахване на множество whitespace
+    - махане на "празни" символи
+    """
+    if not text:
+        return ""
+
+    t = text.strip()
+
+    # normalize whitespace
+    t = re.sub(r"\s+", " ", t)
+
+    # remove zero-width chars sometimes present in copy/paste
+    t = t.replace("\u200b", "").replace("\ufeff", "")
+
+    return t
+________________________________________
+Стъпка 3.3: main/nlp/sentiment.py
+Тук ползваме transformers.pipeline. Ще направим:
+•	lazy load (зарежда модела веднъж при първо извикване)
+•	функция predict_sentiment(text) → връща label + scores за 3 класа
+•	„NEUTRAL“ чрез праг: ако моделът не е достатъчно уверен, маркираме неутрално
+from transformers import pipeline
+from .preprocess import clean_text
+
+# Lazy-loaded singleton
+_classifier = None
+
+def get_classifier():
+    global _classifier
+    if _classifier is None:
+        # Multilingual sentiment model (примерен избор).
+        # Ако искаш, после можем да го сменим с друг multilingual модел.
+        model_name = "cardiffnlp/twitter-xlm-roberta-base-sentiment"
+        _classifier = pipeline(
+            "sentiment-analysis",
+            model=model_name,
+            tokenizer=model_name,
+            return_all_scores=True
+        )
+    return _classifier
+
+
+def predict_sentiment(text: str, neutral_threshold: float = 0.60) -> dict:
+    """
+    Връща:
+      {
+        "sentiment": "positive|negative|neutral",
+        "scores": {"positive": x, "neutral": y, "negative": z},
+        "clean_text": "..."
+      }
+
+    neutral_threshold:
+      ако най-високата вероятност е под този праг -> neutral
+    """
+    cleaned = clean_text(text)
+    if not cleaned:
+        return {
+            "sentiment": "neutral",
+            "scores": {"positive": 0.0, "neutral": 1.0, "negative": 0.0},
+            "clean_text": cleaned,
+        }
+
+    clf = get_classifier()
+
+    # pipeline с return_all_scores=True връща списък с резултати, напр:
+    # [[{'label': 'positive', 'score': 0.8}, {'label':'neutral',...}, ...]]
+    raw = clf(cleaned)[0]
+
+    # Нормализиране на етикетите към positive/neutral/negative
+    scores = {"positive": 0.0, "neutral": 0.0, "negative": 0.0}
+    for item in raw:
+        lbl = item["label"].lower()
+
+        # Модели връщат различни имена: LABEL_0/1/2 или positive/neutral/negative
+        # За този модел обикновено са: negative/neutral/positive
+        if "pos" in lbl or lbl == "positive":
+            scores["positive"] = float(item["score"])
+        elif "neg" in lbl or lbl == "negative":
+            scores["negative"] = float(item["score"])
+        elif "neu" in lbl or lbl == "neutral":
+            scores["neutral"] = float(item["score"])
+
+    # Ако моделът не върне neutral (в някои случаи), ще остане 0.0 — това не е проблем,
+    # защото пак ще изчислим крайния label логично.
+    best_label = max(scores, key=scores.get)
+    best_score = scores[best_label]
+
+    if best_score < neutral_threshold:
+        sentiment = "neutral"
+        # Ако сме го принудили към neutral, е хубаво да дадем някаква "разумна" неутрална стойност.
+        # Нека преразпределим: неутралното = 1 - best_score, останалото както е.
+        # (Това е прагова евристика, описва се в дипломната.)
+        forced_neu = 1.0 - best_score
+        # нормализация (за да сумират ~1)
+        total = scores["positive"] + scores["negative"] + forced_neu
+        if total > 0:
+            scores = {
+                "positive": scores["positive"] / total,
+                "negative": scores["negative"] / total,
+                "neutral": forced_neu / total,
+            }
+    else:
+        sentiment = best_label
+
+    return {"sentiment": sentiment, "scores": scores, "clean_text": cleaned}
+Забележка: конкретният модел cardiffnlp/twitter-xlm-roberta-base-sentiment обикновено връща 3 класа (neg/neu/pos). Евристиката за neutral_threshold ти дава контрол и изглежда добре в дипломната.
+________________________________________
+Етап 4 (следващ): DRF endpoint /api/analyze/
+След като добавиш тези файлове, следващата ни стъпка е:
+•	serializers.py за вход/валидация
+•	views.py (APIView) който вика predict_sentiment()
+•	запис в ReviewAnalysis и връщане на JSON
+________________________________________
+Преди да продължим: 2 бързи проверки
+1.	На каква ОС си (Windows/Linux)? (за torch понякога има дребни особености)
+2.	Искаш ли за момента да започнем само с анализ на текст, а URL extraction да го добавим след като API-то тръгне? (препоръчвам да да)
+Ако кажеш „да, само текст засега“, в следващото съобщение ти давам готови:
+•	main/serializers.py
+•	main/views.py
+•	main/urls.py
+•	промяна в DP/urls.py
+•	примерна curl заявка за тест.
+
+Ти
+Работя на Windowws 11. Нека да започнем с анализа на текст
+Gemini 3.1 Pro
+Добре — започваме само с анализ на текст (без URL). На Windows 11 е ОК; важно е само torch да е инсталиран коректно (ако pip install torch е минало без грешка, продължаваме).
+По-долу са точните файлове и код за DRF endpoint-а.
+________________________________________
+Етап 4: DRF API за анализ на текст
+4.1. main/serializers.py (създай ако го няма)
+from rest_framework import serializers
+
+class AnalyzeTextSerializer(serializers.Serializer):
+    text = serializers.CharField(allow_blank=False, trim_whitespace=True)
+
+    def validate_text(self, value: str) -> str:
+        if len(value.strip()) < 3:
+            raise serializers.ValidationError("Текстът е твърде кратък.")
+        return value
+________________________________________
+4.2. main/views.py (добави API view)
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+from .serializers import AnalyzeTextSerializer
+from .models import ReviewAnalysis
+from .nlp.sentiment import predict_sentiment
+
+
+class AnalyzeTextAPIView(APIView):
+    """
+    POST /api/analyze/
+    Body: {"text": "..."}
+    Response: sentiment + scores + id
+    """
+    def post(self, request):
+        serializer = AnalyzeTextSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        text = serializer.validated_data["text"]
+        result = predict_sentiment(text)
+
+        scores = result["scores"]
+        sentiment = result["sentiment"]
+        clean_text = result["clean_text"]
+
+        obj = ReviewAnalysis.objects.create(
+            input_text=text,
+            clean_text=clean_text,
+            sentiment=sentiment,
+            pos_score=scores.get("positive", 0.0),
+            neu_score=scores.get("neutral", 0.0),
+            neg_score=scores.get("negative", 0.0),
+        )
+
+        return Response(
+            {
+                "id": obj.id,
+                "sentiment": sentiment,
+                "scores": {
+                    "positive": obj.pos_score,
+                    "neutral": obj.neu_score,
+                    "negative": obj.neg_score,
+                },
+                "clean_text": clean_text,
+            },
+            status=status.HTTP_200_OK
+        )
+________________________________________
+4.3. main/urls.py (създай ако го няма)
+from django.urls import path
+from .views import AnalyzeTextAPIView
+
+urlpatterns = [
+    path("api/analyze/", AnalyzeTextAPIView.as_view(), name="api-analyze"),
+]
+________________________________________
+4.4. Включи main.urls в DP/urls.py
+В DP/urls.py добави include:
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('main.urls')),
+]
+________________________________________
+4.5. Тест (без фронтенд, директно към API)
+Стартирай сървъра:
+python manage.py runserver
+Тествай с PowerShell (Windows 11) пример:
+curl -X POST http://127.0.0.1:8000/api/analyze/ `
+  -H "Content-Type: application/json" `
+  -d "{""text"": ""Много съм доволен от обслужването, всичко беше бързо и коректно.""}"
+Очакван отговор (примерно):
+{
+  "id": 1,
+  "sentiment": "positive",
+  "scores": {"positive": 0.8, "neutral": 0.15, "negative": 0.05},
+  "clean_text": "..."
+}
+________________________________________
+Важна бележка за първото пускане (Transformers)
+При първо извикване на /api/analyze/ моделът ще се свали и зареди → може да отнеме време (30–120 сек) и да „замръзне“ първата заявка. След това ще е по-бързо.
+Ако получиш грешка от типа “No module named torch” или проблем с pipeline/model labels — кажи ми точния stack trace и ще го оправим.
+________________________________________
+Следваща стъпка (Етап 5)
+Когато /api/analyze/ работи:
+1.	добавяме history endpoint (GET /api/history/)
+2.	правим UI страница (/) + JS fetch + визуализация с Chart.js
+Напиши ми:
+•	Успя ли да върнеш JSON от /api/analyze/?
+•	Какъв модел се свали (в конзолата пише) и какви sentiment-и връща на 2–3 пробни български изречения?
+
+Ти
+нямам curll - нека отложим този тест или ми дай какво да задам в интефейса на DRF
+Gemini 3.1 Pro
+Можеш напълно да тестваш без curl, директно през DRF Browsable API в браузъра.
+Тест през интерфейса на DRF (Browsable API)
+1.	Стартирай сървъра:
+python manage.py runserver
+2.	Отвори в браузър:
+•	http://127.0.0.1:8000/api/analyze/
+3.	Трябва да видиш DRF страница с форма. Направи:
+•	Method: POST
+•	Content: application/json (ако има избор; понякога е dropdown)
+4.	В полето за body постави точно това (пример):
+{
+  "text": "Много съм доволен от обслужването, всичко беше бързо и коректно."
+}
+5.	Натисни бутона POST.
+Очаквано: ще върне JSON с sentiment, scores, id.
+Пробни текстове (за бърза проверка)
+Позитивен:
+{"text":"Страхотен продукт, препоръчвам го на всички."}
+Негативен:
+{"text":"Ужасно обслужване, загубиха ми поръчката и никой не помогна."}
+По-неутрален:
+{"text":"Продуктът пристигна днес. Изглежда нормално."}
+Ако не се отваря /api/analyze/
+Най-честата причина е, че main/urls.py не е включен в DP/urls.py. Провери, че имаш:
+path('', include('main.urls')),
+Важно за първото пускане
+Първият POST може да отнеме време, защото transformers ще свали и зареди модела. Изчакай.
+________________________________________
+За файла „Задание тема 05.docx“
+Виждам, че си качил документа. Кажи ми само:
+•	искаш ли да извадя точните изисквания от него и да ги „привържа“ към това, което правим (функционалности + как да ги опишеш в дипломната)?
+Ако да — ще го прегледам и ще ти направя кратка карта: „изискване → как се реализира в проекта“.
+
+Ти
+HTTP 200 OK Allow: POST, OPTIONS Content-Type: application/json Vary: Accept { "id": 3, "sentiment": "neutral", "scores": { "positive": 0.0, "neutral": 1.0, "negative": 0.0 }, "clean_text": "Ужасно обслужване, загубиха ми поръчката и никой не помогна." } На всички текстове връща статус "neutral"
+Gemini 3.1 Pro
+Причината да ти връща винаги neutral е в нашата логика за мапване на етикетите в sentiment.py.
+Моделът cardiffnlp/twitter-xlm-roberta-base-sentiment връща label-и най-често като LABEL_0, LABEL_1, LABEL_2, а нашият код търси текстове като "pos"/"neg"/"neu". В резултат всички scores остават 0.0, best_score става 0.0 и заради neutral_threshold насила правим neutral с 1.0.
+1) Поправка: правилно мапване LABEL_0/1/2 → neg/neu/pos
+Отвори main/nlp/sentiment.py и замени обработката на raw с тази версия (цял файл ти давам, за да е лесно):
+from transformers import pipeline
+from .preprocess import clean_text
+
+_classifier = None
+
+def get_classifier():
+    global _classifier
+    if _classifier is None:
+        model_name = "cardiffnlp/twitter-xlm-roberta-base-sentiment"
+        _classifier = pipeline(
+            "sentiment-analysis",
+            model=model_name,
+            tokenizer=model_name,
+            return_all_scores=True
+        )
+    return _classifier
+
+
+def _map_label_to_sentiment(label: str) -> str:
+    """
+    Мапване за този модел:
+    LABEL_0 -> negative
+    LABEL_1 -> neutral
+    LABEL_2 -> positive
+    """
+    l = label.upper().strip()
+    if l == "LABEL_0":
+        return "negative"
+    if l == "LABEL_1":
+        return "neutral"
+    if l == "LABEL_2":
+        return "positive"
+
+    # fallback, ако модел върне текстови етикети
+    low = label.lower()
+    if "neg" in low:
+        return "negative"
+    if "neu" in low:
+        return "neutral"
+    if "pos" in low:
+        return "positive"
+
+    return "neutral"
+
+
+def predict_sentiment(text: str, neutral_threshold: float = 0.60) -> dict:
+    cleaned = clean_text(text)
+    if not cleaned:
+        return {
+            "sentiment": "neutral",
+            "scores": {"positive": 0.0, "neutral": 1.0, "negative": 0.0},
+            "clean_text": cleaned,
+        }
+
+    clf = get_classifier()
+    raw = clf(cleaned)[0]
+
+    scores = {"positive": 0.0, "neutral": 0.0, "negative": 0.0}
+    for item in raw:
+        s = _map_label_to_sentiment(item["label"])
+        scores[s] = float(item["score"])
+
+    best_label = max(scores, key=scores.get)
+    best_score = scores[best_label]
+
+    # евристика за "неутрално", ако моделът не е уверен
+    if best_score < neutral_threshold:
+        sentiment = "neutral"
+    else:
+        sentiment = best_label
+
+    return {"sentiment": sentiment, "scores": scores, "clean_text": cleaned}
+След това:
+•	рестартирай сървъра (CTRL+C и пак python manage.py runserver)
+•	тествай отново през DRF интерфейса на /api/analyze/
+Очакване: „Ужасно обслужване…“ да стане negative (в повечето случаи).
+Ако пак дава много “neutral”
+Намали прага в predict_sentiment(... neutral_threshold=0.45) или направо махни прага временно (за тест) и винаги избирай max вероятността.
+________________________________________
+2) Изискванията от заданието (от .docx) и как ги покриваме
+От документа (тема 05) задължителните функционалности са:
+1.	Въвеждане на данни
+o	UI форма (textarea) и/или API endpoint /api/analyze/
+2.	Предобработка на текста
+o	main/nlp/preprocess.py (нормализация, чистене)
+3.	Класификация (POS/NEG/NEU) + оценка/вероятност
+o	main/nlp/sentiment.py връща scores (вероятности)
+4.	Визуализация на резултата
+o	ще направим страница / + Chart.js bar chart + badge
+5.	Локална демонстрация + кратко ръководство
+o	README.md + requirements.txt + примерни входове
+(По желание в текста е споменато и извличане от URL — ще го добавим след като UI е готов.)
+________________________________________
+Кажи ми резултата след поправката
+1.	След смяната на sentiment.py, какво връща за:
+•	„Страхотен продукт, препоръчвам!“
+•	„Ужасно обслужване…“
+2.	Искаш ли „Неутрален“ да е истинският клас на модела (LABEL_1) или да запазим и праг за принудително неутрално? (по дипломно изглежда добре да има праг, но не е задължително)
+
+Ти
+System check identified no issues (0 silenced). March 25, 2026 - 10:35:18 Django version 4.2.18, using settings 'DP.settings' Starting development server at http://127.0.0.1:8000/ Quit the server with CTRL-BREAK. Method Not Allowed: /api/analyze/ [25/Mar/2026 10:35:23] "GET /api/analyze/ HTTP/1.1" 405 10532 Not Found: /.well-known/appspecific/com.chrome.devtools.json [25/Mar/2026 10:35:23] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 2729 Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads. Loading weights: 100%|███████████████████████████████████████████████████████████████████████████████████████| 201/201 [00:00<00:00, 20099.06it/s] XLMRobertaForSequenceClassification LOAD REPORT from: cardiffnlp/twitter-xlm-roberta-base-sentiment Key | Status | | --------------------------------+------------+--+- roberta.embeddings.position_ids | UNEXPECTED | | Notes: - UNEXPECTED :can be ignored when loading from different task/architecture; not ok if you expect identical arch. Could not extract SentencePiece model from C:\Users\offic\.cache\huggingface\hub\models--cardiffnlp--twitter-xlm-roberta-base-sentiment\snapshots\f2f1202b1bdeb07342385c3f807f9c07cd8f5cf8\sentencepiece.bpe.model using sentencepiece library due to SentencePieceExtractor requires the SentencePiece library but it was not found in your environment. Check out the instructions on the installation page of its repo: https://github.com/google/sentencepiece#installation and follow the ones that match your environment. Please note that you may need to restart your runtime after installation. . Falling back to TikToken extractor. Service Unavailable: /api/analyze/ [25/Mar/2026 10:35:35] "POST /api/analyze/ HTTP/1.1" 503 10724 Not Found: /.well-known/appspecific/com.chrome.devtools.json [25/Mar/2026 10:35:36] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 2729 Method Not Allowed: /api/analyze/ [25/Mar/2026 10:36:03] "GET /api/analyze/ HTTP/1.1" 405 10532 Loading weights: 100%|███████████████████████████████████████████████████████████████████████████████████████| 201/201 [00:00<00:00, 28744.76it/s] XLMRobertaForSequenceClassification LOAD REPORT from: cardiffnlp/twitter-xlm-roberta-base-sentiment Key | Status | | --------------------------------+------------+--+- roberta.embeddings.position_ids | UNEXPECTED | | Notes: - UNEXPECTED :can be ignored when loading from different task/architecture; not ok if you expect identical arch. Could not extract SentencePiece model from C:\Users\offic\.cache\huggingface\hub\models--cardiffnlp--twitter-xlm-roberta-base-sentiment\snapshots\f2f1202b1bdeb07342385c3f807f9c07cd8f5cf8\sentencepiece.bpe.model using sentencepiece library due to SentencePieceExtractor requires the SentencePiece library but it was not found in your environment. Check out the instructions on the installation page of its repo: https://github.com/google/sentencepiece#installation and follow the ones that match your environment. Please note that you may need to restart your runtime after installation. . Falling back to TikToken extractor. Service Unavailable: /api/analyze/ [25/Mar/2026 10:36:19] "POST /api/analyze/ HTTP/1.1" 503 10724 Нещо не е наред. Прикачил съм засегнатите файлове (според мене)
+views.py
+File
+sentiment.py
+File
+Gemini 3.1 Pro
+Проблемът вече не е в мапването на label-ите (то е ОК), а в това, че моделът не може да си зареди tokenizer-а коректно, защото ти липсва библиотеката sentencepiece. В логовете ясно се вижда:
+SentencePieceExtractor requires the SentencePiece library but it was not found...
+и след това при POST получаваш 503 Service Unavailable (в views.py ти връщаш 503 при exception).
+Допълнително:
+•	GET /api/analyze/ дава 405 Method Not Allowed е нормално, защото твоят view поддържа само POST. DRF интерфейсът пак трябва да ти показва форма; 405 е просто отваряне с GET.
+•	Моделът се зарежда повторно (виждаш “Loading weights…” два пъти) — това е, защото всяка неуспешна заявка стига до ново зареждане/или server reload; след като оправим tokenizer-а, това ще спре да е проблем.
+1) Поправка: инсталирай sentencepiece
+В твоя venv изпълни:
+pip install sentencepiece
+След това спри и пусни отново сървъра:
+CTRL + C
+python manage.py runserver
+И тествай пак с POST през DRF интерфейса.
+Ако pip install sentencepiece даде грешка на Windows, кажи ми текста 1:1. (По принцип има готови wheels и минава лесно.)
+2) Обнови requirements.txt
+Добави:
+sentencepiece
+3) (Препоръчително) Разреши GET за удобство в браузъра
+За да не те дразни 405 при отваряне на /api/analyze/, можеш да добавиш get() метод, който да връща кратка инструкция. Това не е задължително, но е удобно:
+В AnalyzeTextAPIView добави:
+def get(self, request):
+    return Response(
+        {"detail": "Use POST with JSON body: {'text': '...'}"},
+        status=status.HTTP_200_OK
+    )
+4) След като тръгне: очаквани резултати
+Пробвай:
+•	„Ужасно обслужване…“ → negative
+•	„Страхотно, много съм доволен“ → positive
+•	„Доставката беше днес“ → често neutral
+5) И още нещо важно (за “neutral_threshold”)
+След като заработи, ако виждаш твърде много neutral, намали прага в predict_sentiment примерно на 0.50 (или временно го махни). Но първо оправяме sentencepiece, защото сега реално падаш в exception и затова е 503.
+Кажи ми само: успя ли да инсталираш sentencepiece и какъв резултат върна за 2–3 тестови изречения след рестарт?
+
+Ти
+Не получавам отговор, който очаквам. В конзолата на сървъра: XLMRobertaForSequenceClassification LOAD REPORT from: cardiffnlp/twitter-xlm-roberta-base-sentiment Key | Status | | --------------------------------+------------+--+- roberta.embeddings.position_ids | UNEXPECTED | | Notes: - UNEXPECTED :can be ignored when loading from different task/architecture; not ok if you expect identical arch. Service Unavailable: /api/analyze/ [25/Mar/2026 10:47:08] "POST /api/analyze/ HTTP/1.1" 503 11763 А в конзолата на DRF: HTTP 503 Service Unavailable Allow: GET, POST, HEAD, OPTIONS Content-Type: application/json Vary: Accept { "detail": "Sentiment analysis failed: string indices must be integers" }
+Gemini 3.1 Pro
+Грешката string indices must be integers идва от реда:
+for item in raw:
+    s = _map_label_to_sentiment(item["label"])
+Т.е. item не е dict, а е string (или raw изобщо не е “list of dicts”, както очакваме). Това се случва при pipeline(... return_all_scores=True) в по-нови версии на transformers, където:
+•	return_all_scores е deprecated/променен, и pipeline може да върне друг формат.
+Решението е: не разчитай на return_all_scores=True, а ползвай новия параметър top_k=None, който е правилният начин да вземеш всички класове.
+Поправка (препоръчителна): смени sentiment.py да работи с новите изходи
+Отвори main/nlp/sentiment.py и замени съдържанието с това (1:1):
+from transformers import pipeline
+from .preprocess import clean_text
+
+_classifier = None
+
+def get_classifier():
+    global _classifier
+    if _classifier is None:
+        model_name = "cardiffnlp/twitter-xlm-roberta-base-sentiment"
+        # top_k=None => връща всички класове (и е съвместимо с нови версии)
+        _classifier = pipeline(
+            task="sentiment-analysis",
+            model=model_name,
+            tokenizer=model_name,
+            top_k=None
+        )
+    return _classifier
+
+
+def _map_label_to_sentiment(label: str) -> str:
+    l = label.upper().strip()
+    if l == "LABEL_0":
+        return "negative"
+    if l == "LABEL_1":
+        return "neutral"
+    if l == "LABEL_2":
+        return "positive"
+
+    low = label.lower()
+    if "neg" in low:
+        return "negative"
+    if "neu" in low:
+        return "neutral"
+    if "pos" in low:
+        return "positive"
+    return "neutral"
+
+
+def predict_sentiment(text: str, neutral_threshold: float = 0.60) -> dict:
+    cleaned = clean_text(text)
+    if not cleaned:
+        return {
+            "sentiment": "neutral",
+            "scores": {"positive": 0.0, "neutral": 1.0, "negative": 0.0},
+            "clean_text": cleaned,
+        }
+
+    clf = get_classifier()
+
+    out = clf(cleaned)
+
+    # out може да е:
+    # 1) list[dict] (ако top_k е число)
+    # 2) list[list[dict]] (ако top_k=None -> всички класове)
+    if isinstance(out, list) and len(out) > 0 and isinstance(out[0], list):
+        raw = out[0]
+    elif isinstance(out, list):
+        raw = out
+    else:
+        raw = []
+
+    scores = {"positive": 0.0, "neutral": 0.0, "negative": 0.0}
+    for item in raw:
+        # item трябва да е dict: {'label': 'LABEL_2', 'score': 0.9}
+        if not isinstance(item, dict):
+            continue
+        s = _map_label_to_sentiment(item.get("label", ""))
+        scores[s] = float(item.get("score", 0.0))
+
+    best_label = max(scores, key=scores.get)
+    best_score = scores[best_label]
+
+    sentiment = "neutral" if best_score < neutral_threshold else best_label
+
+    return {"sentiment": sentiment, "scores": scores, "clean_text": cleaned}
+После:
+1.	рестарт на сървъра (CTRL+C → python manage.py runserver)
+2.	пробвай пак POST през DRF.
+Какво да очакваш в конзолата
+Това:
+roberta.embeddings.position_ids | UNEXPECTED
+не е проблем (самият log казва “can be ignored”).
+Ако пак връща 503
+Направи 2 проверки:
+A) Сигурно ли е инсталиран sentencepiece?
+В същата venv:
+python -c "import sentencepiece; print('ok')"
+B) Намали прага за neutral (за тест)
+За да видиш, че реално работи, временно в views.py можеш да извикаш:
+result = predict_sentiment(text, neutral_threshold=0.40)
+(после ще го върнем обратно/или ще го направим настройка)
+________________________________________
+Защо ти се случи това (накратко)
+transformers променя API-то на pipeline: return_all_scores=True вече не е надеждно. top_k=None е правилният начин да вземеш всички класове и да си построиш scores.
+Кажи ми след смяната на sentiment.py какво връща за:
+•	„Ужасно обслужване…“
+•	„Страхотен продукт…“
+и ако искаш, след това минаваме към UI страница + Chart.js.
+
+Ти
+Сега работи. нека да продължим
+Gemini 3.1 Pro
+Супер! Радвам се, че API-то работи коректно.
+Сега преминаваме към Етап 5: Създаване на потребителски интерфейс (UI) и визуализация с Chart.js. Това директно покрива изискването от заданието за "визуализиране на резултата".
+Ще направим една красива уеб страница, в която потребителят въвежда текст, натиска бутон и веднага вижда резултата и графика на вероятностите.
+Ето стъпките:
+Стъпка 1: Създаване на изглед (View) за страницата
+Отвори main/views.py и добави най-отгоре импорт за render, след което добави една проста функция за зареждане на HTML шаблона:
+from django.shortcuts import render
+# ... останалите импорти си остават ...
+
+def index(request):
+    return render(request, 'main/index.html')
+
+# ... тук надолу стои твоят AnalyzeTextAPIView ...
+Стъпка 2: Добавяне на пътя в main/urls.py
+Отвори main/urls.py и добави пътя за началната страница (празен път ''):
+from django.urls import path
+from .views import AnalyzeTextAPIView, index
+
+urlpatterns = [
+    path('', index, name='index'),  # Началната страница с UI
+    path('api/analyze/', AnalyzeTextAPIView.as_view(), name='api-analyze'),
+]
+Стъпка 3: Създаване на HTML шаблона
+В папката на приложението main създай следната структура от папки: templates/main/.
+Пълният път трябва да е: main/templates/main/index.html.
+Създай файла index.html и постави следния код вътре (използваме Bootstrap за дизайн и Chart.js за графиката):
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <title>Анализ на настроението (Sentiment Analysis)</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { background-color: #f8f9fa; padding-top: 50px; }
+        .result-box { display: none; margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="text-center mb-4">Анализ на потребителски отзиви</h1>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form id="analyze-form">
+                <!-- CSRF Token за сигурност при POST заявки -->
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="text-input" class="form-label">Въведете текст за анализ:</label>
+                    <textarea class="form-control" id="text-input" rows="4" placeholder="Напр. Много съм доволен от продукта!" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100" id="submit-btn">Анализирай</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Секция за резултати -->
+    <div class="row result-box" id="result-section">
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center d-flex flex-column justify-content-center">
+                    <h4 class="card-title">Краен резултат</h4>
+                    <h2 id="sentiment-badge" class="badge bg-secondary p-3 fs-4 mt-3">Неутрален</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <canvas id="sentimentChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let sentimentChart = null;
+
+    document.getElementById('analyze-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const textInput = document.getElementById('text-input').value;
+        const submitBtn = document.getElementById('submit-btn');
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'Анализиране...';
+
+        try {
+            const response = await fetch('/api/analyze/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({ text: textInput })
+            });
+
+            if (!response.ok) throw new Error('Грешка при анализа');
+
+            const data = await response.json();
+            showResult(data.sentiment, data.scores);
+        } catch (error) {
+            alert('Възникна грешка: ' + error.message);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'Анализирай';
+        }
+    });
+
+    function showResult(sentiment, scores) {
+        document.getElementById('result-section').style.display = 'flex';
+
+        // Обновяване на баджа
+        const badge = document.getElementById('sentiment-badge');
+        let badgeColor = 'bg-secondary';
+        let badgeText = 'Неутрален';
+
+        if (sentiment === 'positive') {
+            badgeColor = 'bg-success';
+            badgeText = 'Позитивен';
+        } else if (sentiment === 'negative') {
+            badgeColor = 'bg-danger';
+            badgeText = 'Негативен';
+        }
+
+        badge.className = `badge ${badgeColor} p-3 fs-4 mt-3`;
+        badge.innerText = badgeText;
+
+        // Обновяване на графиката
+        updateChart(scores.positive, scores.neutral, scores.negative);
+    }
+
+    function updateChart(pos, neu, neg) {
+        const ctx = document.getElementById('sentimentChart').getContext('2d');
+
+        if (sentimentChart) {
+            sentimentChart.destroy();
+        }
+
+        sentimentChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Позитивен', 'Неутрален', 'Негативен'],
+                datasets: [{
+                    label: 'Вероятност',
+                    data: [pos, neu, neg],
+                    backgroundColor: [
+                        'rgba(25, 135, 84, 0.7)',  // success green
+                        'rgba(108, 117, 125, 0.7)', // secondary grey
+                        'rgba(220, 53, 69, 0.7)'    // danger red
+                    ],
+                    borderColor: [
+                        'rgba(25, 135, 84, 1)',
+                        'rgba(108, 117, 125, 1)',
+                        'rgba(220, 53, 69, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true, max: 1 }
+                }
+            }
+        });
+    }
+</script>
+
+</body>
+</html>
+Стъпка 4: Тестване
+1.	Увери се, че сървърът работи (python manage.py runserver).
+2.	Отвори браузъра на http://127.0.0.1:8000/ (вече без /api/analyze/).
+3.	Трябва да видиш красив интерфейс с поле за въвеждане.
+4.	Напиши текст (напр. "Това е страхотно!") и натисни "Анализирай".
+Ще се появи резултатът + графика, показваща вероятностите (Scores), точно както се изисква в точка 4 от заданието ти!
+
