@@ -25,6 +25,9 @@ class AnalyzeTextAPIView(APIView):
 
         text = serializer.validated_data["text"]
 
+        import time
+        start_time = time.perf_counter()
+
         try:
             result = predict_sentiment(text)
         except Exception as exc:
@@ -32,6 +35,8 @@ class AnalyzeTextAPIView(APIView):
                 {"detail": f"Sentiment analysis failed: {str(exc)}"},
                 status=status.HTTP_503_SERVICE_UNAVAILABLE
             )
+
+        analysis_time_ms = round((time.perf_counter() - start_time) * 1000, 2)
 
         scores = result["scores"]
         sentiment = result["sentiment"]
@@ -56,15 +61,22 @@ class AnalyzeTextAPIView(APIView):
                     "negative": obj.neg_score,
                 },
                 "clean_text": clean_text,
+                "analysis_time_ms": analysis_time_ms,
+                "date": obj.created_at.strftime("%d/%m/%Y"),
+                "time": obj.created_at.strftime("%H:%M:%S"),
+                "text_length": len(text),
             },
             status=status.HTTP_200_OK
         )
 
+
 def index(request):
     return render(request, 'main/index.html')
 
+
 def index_old(request):
     return render(request, 'main/index_old.html')
+
 
 def index_alex(request):
     return render(request, 'main/index_alex.html')
