@@ -5,20 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6363c3da-3936-4c3b-a953-150f780d5a76" name="Changes" comment="нов дизайн">
-      <change afterPath="$PROJECT_DIR$/Work/DR/Шаблон_проект.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DR/Резюме.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DR/защита.pptx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Theme_2605.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Theme_2605.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DP/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/DP/main/static/js/analize-vue.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DP/main/static/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/DP/main/static/css/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DP/main/templates/main/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/DP/main/templates/main/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DP/main/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/DP/main/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DR/HTML templates.docx" beforeDir="false" afterPath="$PROJECT_DIR$/Work/DR/HTML templates.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DR/Plan za pismena razrabotka (chatgpt api).docx" beforeDir="false" afterPath="$PROJECT_DIR$/Work/DR/Plan za pismena razrabotka (chatgpt api).docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DR/Plan za pismena razrabotka.docx" beforeDir="false" afterPath="$PROJECT_DIR$/Work/DR/Plan za pismena razrabotka.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DR/История.docx" beforeDir="false" afterPath="$PROJECT_DIR$/Work/DR/История.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DR/Титулна страница.docx" beforeDir="false" afterPath="$PROJECT_DIR$/DR/Титулна страница 05.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DR/Шаблон_идеи.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Work/DR/Шаблон_идеи.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DR/Шаблон_проект.docx" beforeDir="false" afterPath="$PROJECT_DIR$/DR/Тема_05_ПП.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DR/теми ПП.docx" beforeDir="false" afterPath="$PROJECT_DIR$/Work/DR/теми ПП.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DR/Тема_05_ПП.docx" beforeDir="false" afterPath="$PROJECT_DIR$/DR/Тема_05_ПП.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DR/Титулна_страница_05_ПП.docx" beforeDir="false" afterPath="$PROJECT_DIR$/DR/Титулна_страница_05_ПП.docx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +46,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/pgee-dzi2024/ThemePP_2605.git&quot;,
-    &quot;accountId&quot;: &quot;35f0c333-9750-47ec-a10b-0f5cc06779e9&quot;
+    &quot;accountId&quot;: &quot;ebe21162-f1aa-4acd-85cf-672b86021423&quot;
   }
 }</component>
   <component name="McpProjectServerCommands">
@@ -69,41 +61,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Django Server.Unnamed.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.python -m pip install -r requirements.txt.executor": "Run",
-    "Python.пример.executor": "Run",
-    "Python.пример2.executor": "Run",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "ai.playground.ignore.import.keys.banner.in.settings": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "D:/DZI_2026/PP/Theme_05_Alex/DR",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Django Server.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.python -m pip install -r requirements.txt.executor&quot;: &quot;Run&quot;,
+    &quot;Python.пример.executor&quot;: &quot;Run&quot;,
+    &quot;Python.пример2.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenDjangoStructureViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;ai.playground.ignore.import.keys.banner.in.settings&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/DZI_2026/PP/Theme_05_Alex/DR&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mariadb"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mariadb&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="PyConsoleOptionsProvider">
     <option name="myUseExistingConsole" value="true" />
   </component>
@@ -121,7 +113,7 @@
       <recent name="C:\DZI_2026\PP\Theme_05_Alex\Work" />
     </key>
   </component>
-  <component name="RunManager" selected="Django Server.Unnamed">
+  <component name="RunManager" selected="Python.python -m pip install -r requirements.txt">
     <configuration name="пример" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Theme_2605" />
       <option name="ENV_FILES" value="" />
@@ -135,7 +127,6 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="DEBUG_JUST_MY_CODE" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="RUN_TOOL" value="" />
       <option name="SCRIPT_NAME" value="C:\DZI_2026\PP\Theme_05_Alex\Work\пример.py" />
@@ -160,7 +151,6 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="DEBUG_JUST_MY_CODE" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="RUN_TOOL" value="" />
       <option name="SCRIPT_NAME" value="C:\DZI_2026\PP\Theme_05_Alex\Work\пример2.py" />
@@ -185,7 +175,6 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="DEBUG_JUST_MY_CODE" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="RUN_TOOL" value="" />
       <option name="SCRIPT_NAME" value="pip" />
@@ -226,7 +215,6 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Django Server.Unnamed" />
       <item itemvalue="Python.python -m pip install -r requirements.txt" />
       <item itemvalue="Python.пример" />
       <item itemvalue="Python.пример2" />
@@ -242,8 +230,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-3bd3a6803838-JavaScript-PY-261.22158.340" />
-        <option value="bundled-python-sdk-b63d5a1f7c97-b61e75351b1f-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-261.22158.340" />
+        <option value="bundled-python-sdk-0978a7220b69-9867c7d4c0a4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.28294.336" />
       </set>
     </attachedChunks>
   </component>
