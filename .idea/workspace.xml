@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6363c3da-3936-4c3b-a953-150f780d5a76" name="Changes" comment="нов дизайн">
-      <change afterPath="$PROJECT_DIR$/DR/Резюме.docx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DR/защита.pptx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Theme_2605.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Theme_2605.iml" afterDir="false" />
+    <list default="true" id="6363c3da-3936-4c3b-a953-150f780d5a76" name="Changes" comment="Презентация начало">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DR/Тема_05_ПП.docx" beforeDir="false" afterPath="$PROJECT_DIR$/DR/Тема_05_ПП.docx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DR/Титулна_страница_05_ПП.docx" beforeDir="false" afterPath="$PROJECT_DIR$/DR/Титулна_страница_05_ПП.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DR/защита.pptx" beforeDir="false" afterPath="$PROJECT_DIR$/DR/защита.pptx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -361,7 +357,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775858884710</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Презентация начало">
+      <option name="closed" value="true" />
+      <created>1777371900967</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1777371900967</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -379,7 +383,8 @@
     <MESSAGE value="work on template" />
     <MESSAGE value="Чиста инсталация на django" />
     <MESSAGE value="нов дизайн" />
-    <option name="LAST_COMMIT_MESSAGE" value="нов дизайн" />
+    <MESSAGE value="Презентация начало" />
+    <option name="LAST_COMMIT_MESSAGE" value="Презентация начало" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Theme_05_Alex$python__m_pip_install__r_requirements_txt.coverage" NAME="python -m pip install -r requirements.txt Coverage Results" MODIFIED="1775833451142" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
